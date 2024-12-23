@@ -4,14 +4,14 @@ services:
     build: .
     container_name: todo-app
     environment:
-      - MONGO_URI=mongodb://mongo:27017/todo_app # MongoDB service URL
+      - MONGO_URI=mongodb://mongo:27017/todo_app
     ports:
-      - "8080:8080" # Map local port 5000 to container port 5000
-    depends_on:
-      - mongo # Ensure the mongo service is up before starting the app
+      - "8080:8080"
     volumes:
-      - .:/usr/src/app # Mount local files for development (optional)
-      - /usr/src/app/node_modules # Prevent node_modules from being overwritten by the local one
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - mongo
     networks:
       - todo-network
 
@@ -20,16 +20,47 @@ services:
     image: mongo:latest
     container_name: mongo-db
     ports:
-      - "27017:27017" # Expose MongoDB port
+      - "27017:27017"
     networks:
       - todo-network
     volumes:
-      - mongo-data:/data/db # Persist MongoDB data
+      - mongo-data:/data/db
 
-networks:
-  todo-network:
-    driver: bridge
+  # Prometheus Service
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - prometheus-data:/prometheus
+    networks:
+      - todo-network
+
+  # Grafana Service
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: "admin" # Set your admin password here
+    ports:
+      - "3000:3000" # Grafana accessible on port 3000
+    volumes:
+      - grafana-data:/var/lib/grafana # Persist Grafana data, dashboards, and config
+      - ./grafana/provisioning:/etc/grafana/provisioning # For provisioning dashboards and datasources
+    depends_on:
+      - prometheus
+    networks:
+      - todo-network
 
 volumes:
   mongo-data:
     driver: local
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local
+
+networks:
+  todo-network:
+    driver: bridge

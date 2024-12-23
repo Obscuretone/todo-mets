@@ -17,6 +17,8 @@ This is a simple Todo application built using the **METS** stack:
 - **MongoDB** - Used for persistent storage of tasks.
 - **Express** - Handles the routing and HTTP logic.
 - **TypeScript** - Provides type safety and modern JavaScript features.
+- **Prometheus** - Used for uptime validation and tracking HTTP request metrics.
+- **Grafana** - Provides a visualization and monitoring dashboard for application performance.
 
 ## Installation
 
