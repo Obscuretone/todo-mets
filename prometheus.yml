@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 15s # Scrape metrics every 15 seconds
+
+scrape_configs:
+  - job_name: 'nodejs-app'
+    static_configs:
+      - targets: ['app:8080'] # This points to your app container (ensure this matches the port you're exposing metrics on)
+
+  # Optionally, if your app exposes custom metrics, you can add another job for that as well.
+  # For example, if you have a Node.js metrics endpoint at /metrics, add it like this:
+  # - job_name: 'nodejs-metrics'
+  #   static_configs:
+  #     - targets: ['app:8080']
