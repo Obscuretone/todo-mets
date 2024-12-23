@@ -1,0 +1,35 @@
+services:
+  # Node.js Backend Service
+  app:
+    build: .
+    container_name: todo-app
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/todo_app # MongoDB service URL
+    ports:
+      - "8080:8080" # Map local port 5000 to container port 5000
+    depends_on:
+      - mongo # Ensure the mongo service is up before starting the app
+    volumes:
+      - .:/usr/src/app # Mount local files for development (optional)
+      - /usr/src/app/node_modules # Prevent node_modules from being overwritten by the local one
+    networks:
+      - todo-network
+
+  # MongoDB Database Service
+  mongo:
+    image: mongo:latest
+    container_name: mongo-db
+    ports:
+      - "27017:27017" # Expose MongoDB port
+    networks:
+      - todo-network
+    volumes:
+      - mongo-data:/data/db # Persist MongoDB data
+
+networks:
+  todo-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
+    driver: local
