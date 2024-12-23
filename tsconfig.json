@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "outDir": "./dist", // Ensure the output directory is set to dist
+    "rootDir": "./src", // The source files should be in the src directory
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": [
+    "src/**/*.ts" // This will include all .ts files in the src folder and its subdirectories
+  ]
+}
